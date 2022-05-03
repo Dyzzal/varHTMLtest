@@ -1,0 +1,82 @@
+<html>
+<!--
+  Created using jsbin.ably.com
+  Source can be edited via https://jsbin.ably.com/opuciy/4/edit
+-->
+<head>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="//cdn.ably.io/lib/ably-1.js"></script>
+  <title>UnamedCardGame</title>
+<style id="jsbin-css">
+
+</style>
+</head>
+<body>
+  <h1>Player</h1>
+  <input type="text" id="code" placeholder="code">
+  <br>
+  <input type="text" id="name" placeholder="name">
+  <input type="button" id="enter" value="enter">
+
+  <p id="room"></p>
+
+  <br>
+  <input type="button" value="A" id="a">
+  <input type="button" value="Main" id="hello">
+  <br><br>
+  <ul id="received"></ul>
+<script>
+var parameters = location.search.substring(1).split("&");
+
+var temp = parameters[0].split("=");
+l = unescape(temp[1]);
+temp = parameters[1].split("=");
+p = unescape(temp[1]);
+
+var code = document.getElementById("code");
+
+document.getElementById("room").innerHTML = p;
+
+var ably = new Ably.Realtime({ key: '9uhyqw.N6eJBw:E7WMQcVIzAseR2001w3P5yyrRu4OXtJcjyyyzLFRvXY' });
+
+var channel = ably.channels.get(p);
+$receivedLog = $('#received');
+
+
+channel.subscribe('alert', function(message) {
+var received = new Date(message.timestamp),
+      messageText = message.data;
+  $receivedLog.prepend($('<li>').text(messageText));
+
+});
+
+function code(){
+  channel = ably.channels.get(p);
+}
+function announce(){
+  var message = 1 + " joined";
+  channel.publish('main', message);
+}
+
+$('input#enter').on('click', function() {
+  code();
+});
+
+$('input#enter').on('click', function() {
+  announce();
+});
+
+$('input#a').on('click', function() {
+  var message = "A";
+  channel.publish('alert', message);
+});
+$('input#hello').on('click', function() {
+  var message = "Hello";
+channel.publish('main', message);
+});
+
+announce();
+</script>
+</body>
+</html>
+  
