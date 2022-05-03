@@ -17,8 +17,8 @@
   <p id="room"></p>
 
   <br>
-  <input type="button" value="A" id="a">
-  <input type="button" value="Main" id="hello">
+  <input type="button" value="Send to clients" id="a">
+  <input type="button" value="Send to master" id="hello">
   <br><br>
   <ul id="received"></ul>
 <script>
@@ -67,7 +67,7 @@ $('input#a').on('click', function() {
   channel.publish('alert', message);
 });
 $('input#hello').on('click', function() {
-  var message = "Hello";
+  var message = amo +" said hello";
 channel.publish('main', message);
 });
 
